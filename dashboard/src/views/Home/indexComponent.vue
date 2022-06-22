@@ -1,0 +1,51 @@
+<template>
+  <custom-header
+    @create-account="handleAccountCreate"
+    @login="handleLogin"
+  />
+  <contact-component/>
+  <div class="flex justify-center py-10 bg-brand-gray">
+    <p class="font-medium text-center text-gray-800">feedbacker ₢ 2022</p>
+  </div>
+</template>
+
+<script>
+import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import CustomHeader from './CustomHeader.vue'
+import ContactComponent from './ContactComponent.vue'
+import useModal from '../../hooks/useModal'
+
+export default {
+  components: { CustomHeader, ContactComponent },
+  setup () {
+    const router = useRouter()
+    const modal = useModal()
+
+    onMounted(() => {
+      const token = window.localStorage.getItem('token')
+      if (token) {
+        console.log('toke: ', token)
+        router.push({ name: 'Feedbacks' })
+      }
+    })
+
+    function handleLogin () {
+      console.log('login')
+      modal.open({
+        component: 'ModalLogin'
+      })
+    }
+    function handleAccountCreate () {
+      modal.open({
+        component: 'ModalCreateAccount'
+      })
+    }
+
+    return {
+      handleLogin,
+      handleAccountCreate
+    }
+  }
+}
+</script>
